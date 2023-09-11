@@ -62,7 +62,7 @@ namespace ListSquads
             Console.WriteLine("Второй отряд");
             ShowInfo(_secondSquad);
             Console.WriteLine($"Всех бойцов из отряда 1, у которых фамилия начинается на букву {_firstInitialeSurName},переводим во 2 отряд.");
-            _secondSquad = _firstSquad.Where(soldier => soldier.Surname.StartsWith(_firstInitialeSurName)).Select(soldier => soldier).Union(_secondSquad).ToList();
+            _secondSquad = _firstSquad.Where(soldier => soldier.Surname.StartsWith(_firstInitialeSurName)).Union(_secondSquad).ToList();
             _firstSquad = _firstSquad.Except(_secondSquad).ToList();
             ShowInfo(_firstSquad);
             Console.WriteLine();
