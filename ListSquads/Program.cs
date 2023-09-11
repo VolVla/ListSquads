@@ -17,7 +17,7 @@ namespace ListSquads
                 Console.WriteLine("Для начало работы нажмите на любую клавишу");
                 Console.ReadKey();
                 Console.Clear();
-                division.CortSquad();
+                division.TransferSoldier();
                 Console.WriteLine($"\nВы хотите выйти из программы?Нажмите {exitButton}.\nДля продолжение работы нажмите любую другую клавишу");
 
                 if (Console.ReadKey().Key == exitButton)
@@ -37,7 +37,7 @@ namespace ListSquads
         private List<Soldier> _secondSquad;
         private string _firstInitialeSurName = "Б";
 
-        public Division() 
+        public Division()
         {
             _firstSquad = new List<Soldier>()
             {
@@ -55,33 +55,42 @@ namespace ListSquads
             };
         }
 
-        public void CortSquad() 
+        public void TransferSoldier()
         {
             Console.WriteLine("Первый отряд");
             ShowInfo(_firstSquad);
             Console.WriteLine("Второй отряд");
             ShowInfo(_secondSquad);
             Console.WriteLine($"Всех бойцов из отряда 1, у которых фамилия начинается на букву {_firstInitialeSurName},переводим во 2 отряд.");
-            var filterColdier = _firstSquad.Where(soldier => soldier.SurName.ToUpper().StartsWith(_firstInitialeSurName)).Concat(_secondSquad);
-            ShowInfo(filterColdier);
+            var transferSoldier = _firstSquad.Where(soldier => soldier.Surname.StartsWith(_firstInitialeSurName)).Select(soldier => soldier);
+            _firstSquad = _firstSquad.Where(soldier => !soldier.Surname.StartsWith(_firstInitialeSurName)).ToList();
+
+            foreach (var soldier in transferSoldier)
+            {
+                _secondSquad.Add(soldier);
+            }
+
+            ShowInfo(_firstSquad);
+            Console.WriteLine();
+            ShowInfo(_secondSquad);
         }
 
         private void ShowInfo(IEnumerable<Soldier> _filterSoldiers)
         {
-            foreach(var soldier in _filterSoldiers)
+            foreach (var soldier in _filterSoldiers)
             {
-                Console.WriteLine($"Солдат с фамилией {soldier.SurName}");
+                Console.WriteLine($"Солдат с фамилией {soldier.Surname}");
             }
         }
     }
 
     class Soldier
     {
-        public Soldier(string surName) 
+        public Soldier(string surName)
         {
-            SurName = surName;
+            Surname = surName;
         }
 
-        public string SurName { get;private set; }
+        public string Surname { get; private set; }
     }
 }
