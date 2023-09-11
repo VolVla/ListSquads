@@ -17,7 +17,7 @@ namespace ListSquads
                 Console.WriteLine("Для начало работы нажмите на любую клавишу");
                 Console.ReadKey();
                 Console.Clear();
-                division.TransferSoldier();
+                division.TransferSoldiers();
                 Console.WriteLine($"\nВы хотите выйти из программы?Нажмите {exitButton}.\nДля продолжение работы нажмите любую другую клавишу");
 
                 if (Console.ReadKey().Key == exitButton)
@@ -35,7 +35,7 @@ namespace ListSquads
     {
         private List<Soldier> _firstSquad;
         private List<Soldier> _secondSquad;
-        private string _firstInitialeSurName = "Б";
+        private string _firstInitialeSurname = "Б";
 
         public Division()
         {
@@ -55,15 +55,16 @@ namespace ListSquads
             };
         }
 
-        public void TransferSoldier()
+        public void TransferSoldiers()
         {
             Console.WriteLine("Первый отряд");
             ShowInfo(_firstSquad);
             Console.WriteLine("Второй отряд");
             ShowInfo(_secondSquad);
-            Console.WriteLine($"Всех бойцов из отряда 1, у которых фамилия начинается на букву {_firstInitialeSurName},переводим во 2 отряд.");
-            _secondSquad = _firstSquad.Where(soldier => soldier.Surname.StartsWith(_firstInitialeSurName)).Union(_secondSquad).ToList();
-            _firstSquad = _firstSquad.Except(_secondSquad).ToList();
+            Console.WriteLine($"Всех бойцов из отряда 1, у которых фамилия начинается на букву {_firstInitialeSurname},переводим во 2 отряд.");
+            var initialSurname = _firstSquad.Where(soldier => soldier.Surname.StartsWith(_firstInitialeSurname));
+            _firstSquad = _firstSquad.Except(initialSurname).ToList();
+            _secondSquad = initialSurname.Union(_secondSquad).ToList();
             ShowInfo(_firstSquad);
             Console.WriteLine();
             ShowInfo(_secondSquad);
@@ -80,9 +81,9 @@ namespace ListSquads
 
     class Soldier
     {
-        public Soldier(string surName)
+        public Soldier(string surname)
         {
-            Surname = surName;
+            Surname = surname;
         }
 
         public string Surname { get; private set; }
